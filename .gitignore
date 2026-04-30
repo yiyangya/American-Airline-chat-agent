@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Environment variables / secrets
+.env
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project-specific temporary files
+SUMMARY.md
+docs/
+CLAUDE.md
+
+# Airline working database — mutations from tool calls live here.
+# The immutable baseline is data/airline/db.seed.json (tracked).
+data/airline/db.json
+data/airline/db.json.tmp
+
+# Runtime logs
+*.log
+messages.log

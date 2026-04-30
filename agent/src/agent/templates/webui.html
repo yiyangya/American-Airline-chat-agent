@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>American Airlines · Customer Service Assistant</title>
+    <link rel="icon" type="image/jpeg" href="/static/American-Airliners-logo.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --aa-navy: #0F1A4A;
+            --aa-navy-deep: #0A1238;
+            --aa-blue: #0078D2;
+            --aa-red: #C8102E;
+            --aa-red-deep: #9A0C24;
+            --bg-page: #F4F6FA;
+            --bg-card: #FFFFFF;
+            --bg-muted: #F8F9FC;
+            --border: #E4E7EE;
+            --border-strong: #CBD2DC;
+            --text-primary: #0F1419;
+            --text-secondary: #5B6770;
+            --text-muted: #8A95A1;
+            --shadow-sm: 0 1px 2px rgba(15, 26, 74, 0.06);
+            --shadow-md: 0 4px 16px rgba(15, 26, 74, 0.08);
+            --shadow-lg: 0 12px 32px rgba(15, 26, 74, 0.12);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --radius-pill: 999px;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, "Segoe UI", sans-serif;
+            background:
+                radial-gradient(ellipse at top left, rgba(0, 120, 210, 0.08), transparent 50%),
+                radial-gradient(ellipse at bottom right, rgba(200, 16, 46, 0.05), transparent 50%),
+                var(--bg-page);
+            color: var(--text-primary);
+            font-size: 14px;
+            line-height: 1.55;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ---------- Header ---------- */
+        .app-header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .brand-logo {
+            height: 38px;
+            width: auto;
+            display: block;
+        }
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.15;
+            border-left: 1px solid var(--border);
+            padding-left: 14px;
+        }
+        .brand-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--aa-navy);
+            letter-spacing: -0.01em;
+        }
+        .brand-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .live-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 11px;
+            border-radius: var(--radius-pill);
+            background: rgba(34, 167, 93, 0.1);
+            color: #1F8A4C;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .live-pill::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #22A75D;
+            box-shadow: 0 0 0 0 rgba(34, 167, 93, 0.6);
+            animation: pulse 1.8s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(34, 167, 93, 0.6); }
+            70% { box-shadow: 0 0 0 8px rgba(34, 167, 93, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 167, 93, 0); }
+        }
+
+        /* ---------- Layout ---------- */
+        .app-main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 24px;
+            max-width: 1280px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 24px 28px;
+        }
+
+        /* ---------- Sidebar ---------- */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 18px;
+            box-shadow: var(--shadow-sm);
+        }
+        .card-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+        }
+        .quick-action {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 11px 13px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-align: left;
+            font-size: 13px;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: all 0.15s ease;
+            margin-bottom: 8px;
+            font-family: inherit;
+        }
+        .quick-action:last-child { margin-bottom: 0; }
+        .quick-action:hover {
+            border-color: var(--aa-blue);
+            background: rgba(0, 120, 210, 0.04);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+        .quick-action .icon {
+            font-size: 18px;
+            line-height: 1;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(0, 120, 210, 0.12), rgba(15, 26, 74, 0.08));
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        /* MCP servers list */
+        .server-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+            font-size: 12px;
+            color: var(--text-secondary);
+            word-break: break-all;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .status-connected { background: #22A75D; box-shadow: 0 0 0 3px rgba(34, 167, 93, 0.15); }
+        .status-failed { background: var(--aa-red); box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.15); }
+        .status-pending { background: #E0A800; box-shadow: 0 0 0 3px rgba(224, 168, 0, 0.15); }
+        .server-empty {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* ---------- Chat panel ---------- */
+        .chat-panel {
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            min-height: calc(100vh - 160px);
+        }
+        .chat-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 22px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(180deg, #FAFBFD 0%, #FFFFFF 100%);
+        }
+        .chat-toolbar-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--aa-navy);
+        }
+        .chat-toolbar-title .agent-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--aa-navy), var(--aa-blue));
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+        .reset-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: var(--bg-card);
+            color: var(--aa-red);
+            border: 1px solid rgba(200, 16, 46, 0.25);
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.15s ease;
+        }
+        .reset-btn:hover {
+            background: var(--aa-red);
+            color: white;
+            border-color: var(--aa-red);
+        }
+
+        /* ---------- Messages ---------- */
+        #chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 28px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            scroll-behavior: smooth;
+        }
+        #chat::-webkit-scrollbar { width: 8px; }
+        #chat::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+        #chat::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            max-width: 85%;
+            animation: msgIn 0.25s ease-out;
+        }
+        @keyframes msgIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .msg-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 0.04em;
+        }
+        .msg-bubble {
+            padding: 11px 16px;
+            border-radius: 14px;
+            font-size: 14px;
+            line-height: 1.55;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .msg-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* User messages (right) */
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        .message.user .msg-avatar {
+            background: linear-gradient(135deg, #2A3F7F, var(--aa-navy));
+            color: white;
+        }
+        .message.user .msg-bubble {
+            background: linear-gradient(135deg, var(--aa-navy), #1B2D6E);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+        .message.user .msg-meta { text-align: right; }
+
+        /* Assistant messages (left) */
+        .message.assistant .msg-avatar {
+            background: linear-gradient(135deg, var(--aa-blue), var(--aa-navy));
+            color: white;
+        }
+        .message.assistant .msg-bubble {
+            background: var(--bg-muted);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 4px;
+        }
+
+        /* System messages */
+        .message.system {
+            align-self: center;
+            max-width: 70%;
+        }
+        .message.system .msg-avatar { display: none; }
+        .message.system .msg-bubble {
+            background: rgba(224, 168, 0, 0.08);
+            border: 1px dashed rgba(224, 168, 0, 0.4);
+            color: #7A5A00;
+            font-size: 13px;
+            font-style: italic;
+            text-align: center;
+            border-radius: 10px;
+        }
+        .message.system.error .msg-bubble {
+            background: rgba(200, 16, 46, 0.06);
+            border-color: rgba(200, 16, 46, 0.35);
+            color: var(--aa-red-deep);
+        }
+
+        /* Typing indicator */
+        .typing-dots {
+            display: inline-flex;
+            gap: 4px;
+            align-items: center;
+            padding: 4px 0;
+        }
+        .typing-dots span {
+            width: 7px;
+            height: 7px;
+            background: var(--text-muted);
+            border-radius: 50%;
+            animation: typing 1.2s infinite ease-in-out;
+        }
+        .typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-5px); opacity: 1; }
+        }
+
+        /* ---------- Welcome screen ---------- */
+        .welcome {
+            margin: auto;
+            max-width: 560px;
+            text-align: center;
+            padding: 20px;
+            animation: msgIn 0.4s ease-out;
+        }
+        .welcome-logo {
+            height: 60px;
+            margin-bottom: 22px;
+        }
+        .welcome h2 {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--aa-navy);
+            margin: 0 0 8px;
+            letter-spacing: -0.02em;
+        }
+        .welcome p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin: 0 0 24px;
+        }
+        .suggestion-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            text-align: left;
+        }
+        .suggestion-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            text-align: left;
+        }
+        .suggestion-card:hover {
+            border-color: var(--aa-blue);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        .suggestion-card .icon {
+            font-size: 22px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        .suggestion-card-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .suggestion-card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .suggestion-card-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* ---------- Input area ---------- */
+        .input-shell {
+            border-top: 1px solid var(--border);
+            padding: 16px 22px 18px;
+            background: linear-gradient(180deg, #FFFFFF 0%, #FAFBFD 100%);
+        }
+        .input-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            background: var(--bg-card);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 8px 8px 8px 18px;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .input-row:focus-within {
+            border-color: var(--aa-blue);
+            box-shadow: 0 0 0 3px rgba(0, 120, 210, 0.12);
+        }
+        #message-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--text-primary);
+            padding: 9px 0;
+            resize: none;
+            min-height: 22px;
+            max-height: 140px;
+            line-height: 1.5;
+        }
+        #message-input::placeholder { color: var(--text-muted); }
+        .send-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border: none;
+            background: linear-gradient(135deg, var(--aa-blue), var(--aa-navy));
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0, 120, 210, 0.35);
+        }
+        .send-btn:hover:not(:disabled) {
+            transform: translateY(-1px) scale(1.04);
+            box-shadow: 0 4px 12px rgba(0, 120, 210, 0.45);
+        }
+        .send-btn:disabled {
+            background: #C5CCD6;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+        .send-btn svg { width: 16px; height: 16px; }
+        .input-hint {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        /* ---------- Responsive ---------- */
+        @media (max-width: 900px) {
+            .app-main {
+                grid-template-columns: 1fr;
+                padding: 16px;
+                gap: 16px;
+            }
+            .sidebar { order: 2; }
+            .chat-panel { min-height: calc(100vh - 220px); }
+            .app-header { padding: 12px 16px; }
+            .brand-logo { height: 30px; }
+            .brand-text { padding-left: 10px; }
+            .brand-title { font-size: 13px; }
+            .brand-subtitle { font-size: 11px; }
+            #chat { padding: 18px; }
+            .suggestion-grid { grid-template-columns: 1fr; }
+            .message { max-width: 95%; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="app-header">
+    <div class="brand">
+        <img class="brand-logo" src="/static/American-Airliners-logo.jpg" alt="American Airlines">
+        <div class="brand-text">
+            <span class="brand-title">Customer Service Assistant</span>
+            <span class="brand-subtitle">Your virtual travel concierge</span>
+        </div>
+    </div>
+    <div class="header-actions">
+        <span class="live-pill">Online</span>
+    </div>
+</header>
+
+<main class="app-main">
+
+    <aside class="sidebar">
+        <div class="card">
+            <div class="card-title">Quick Actions</div>
+            <button class="quick-action" data-prompt="I'd like to book a flight.">
+                <span class="icon">&#9992;&#65039;</span>
+                <span>Book a flight</span>
+            </button>
+            <button class="quick-action" data-prompt="I need to cancel my reservation.">
+                <span class="icon">&#10060;</span>
+                <span>Cancel reservation</span>
+            </button>
+            <button class="quick-action" data-prompt="Can you check the status of my flight?">
+                <span class="icon">&#128338;</span>
+                <span>Flight status</span>
+            </button>
+            <button class="quick-action" data-prompt="I have a question about baggage policy.">
+                <span class="icon">&#128188;</span>
+                <span>Baggage info</span>
+            </button>
+            <button class="quick-action" data-prompt="How do I check in for my flight?">
+                <span class="icon">&#9989;</span>
+                <span>Check in</span>
+            </button>
+            <button class="quick-action" data-prompt="I'd like to manage my AAdvantage miles.">
+                <span class="icon">&#11088;</span>
+                <span>AAdvantage&reg; miles</span>
+            </button>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Connection Status</div>
+            <div id="mcp-servers"></div>
+        </div>
+    </aside>
+
+    <section class="chat-panel">
+        <div class="chat-toolbar">
+            <div class="chat-toolbar-title">
+                <span class="agent-avatar">AA</span>
+                <span>American Airlines Assistant</span>
+            </div>
+            <button id="reset-btn" class="reset-btn" title="Start a new conversation">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+                New chat
+            </button>
+        </div>
+
+        <div id="chat"></div>
+
+        <div class="input-shell">
+            <div class="input-row">
+                <textarea id="message-input" rows="1" placeholder="Ask about bookings, cancellations, flight status, baggage..."></textarea>
+                <button id="send-btn" class="send-btn" title="Send message">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9z"/></svg>
+                </button>
+            </div>
+            <div class="input-hint">American Airlines AI assistant. Responses may not always be accurate &mdash; verify critical details with an agent.</div>
+        </div>
+    </section>
+
+</main>
+
+<script>
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('message-input');
+    const sendBtn = document.getElementById('send-btn');
+    const resetBtn = document.getElementById('reset-btn');
+
+    let typingEl = null;
+    let hasMessages = false;
+
+    /* ---------- Welcome screen ---------- */
+    const SUGGESTIONS = [
+        { icon: '\u2708\uFE0F', title: 'Book a new flight',     subtitle: 'Find and book the best fares', prompt: "I'd like to book a flight." },
+        { icon: '\u274C',       title: 'Cancel a reservation',  subtitle: 'Cancel or change a booking',   prompt: "I need to cancel my reservation." },
+        { icon: '\uD83D\uDD52', title: 'Check flight status',   subtitle: 'Real-time arrivals & delays',  prompt: "Can you check the status of my flight?" },
+        { icon: '\uD83D\uDCBC', title: 'Baggage information',   subtitle: 'Allowance, fees, lost bags',   prompt: "I have a question about baggage policy." },
+    ];
+
+    function renderWelcome() {
+        chat.innerHTML = '';
+        hasMessages = false;
+        const wrap = document.createElement('div');
+        wrap.className = 'welcome';
+        wrap.innerHTML = `
+            <img class="welcome-logo" src="/static/American-Airliners-logo.jpg" alt="American Airlines">
+            <h2>How can I help you today?</h2>
+            <p>I can help with bookings, cancellations, flight status, baggage and more.</p>
+            <div class="suggestion-grid"></div>
+        `;
+        const grid = wrap.querySelector('.suggestion-grid');
+        SUGGESTIONS.forEach(s => {
+            const card = document.createElement('button');
+            card.className = 'suggestion-card';
+            card.innerHTML = `
+                <span class="icon">${s.icon}</span>
+                <span class="suggestion-card-text">
+                    <span class="suggestion-card-title">${s.title}</span>
+                    <span class="suggestion-card-subtitle">${s.subtitle}</span>
+                </span>
+            `;
+            card.addEventListener('click', () => {
+                input.value = s.prompt;
+                input.focus();
+                autoGrow();
+                sendMessage();
+            });
+            grid.appendChild(card);
+        });
+        chat.appendChild(wrap);
+    }
+
+    /* ---------- Messages ---------- */
+    function clearWelcome() {
+        if (!hasMessages) {
+            chat.innerHTML = '';
+            hasMessages = true;
+        }
+    }
+
+    function avatarFor(role) {
+        if (role === 'user')      return 'YOU';
+        if (role === 'assistant') return 'AA';
+        return '';
+    }
+
+    function addMessage(role, content, opts = {}) {
+        clearWelcome();
+        const msg = document.createElement('div');
+        msg.className = `message ${role}` + (opts.error ? ' error' : '');
+
+        if (role !== 'system') {
+            const avatar = document.createElement('div');
+            avatar.className = 'msg-avatar';
+            avatar.textContent = avatarFor(role);
+            msg.appendChild(avatar);
+        }
+
+        const bubbleWrap = document.createElement('div');
+        const bubble = document.createElement('div');
+        bubble.className = 'msg-bubble';
+        bubble.textContent = content;
+        bubbleWrap.appendChild(bubble);
+        msg.appendChild(bubbleWrap);
+
+        chat.appendChild(msg);
+        chat.scrollTop = chat.scrollHeight;
+        return msg;
+    }
+
+    function showTyping() {
+        if (typingEl) return;
+        clearWelcome();
+        typingEl = document.createElement('div');
+        typingEl.className = 'message assistant';
+        typingEl.innerHTML = `
+            <div class="msg-avatar">AA</div>
+            <div>
+                <div class="msg-bubble">
+                    <div class="typing-dots"><span></span><span></span><span></span></div>
+                </div>
+            </div>
+        `;
+        chat.appendChild(typingEl);
+        chat.scrollTop = chat.scrollHeight;
+    }
+    function hideTyping() {
+        if (typingEl) { typingEl.remove(); typingEl = null; }
+    }
+
+    /* ---------- Send / SSE ---------- */
+    async function sendMessage() {
+        const message = input.value.trim();
+        if (!message) return;
+
+        addMessage('user', message);
+        input.value = '';
+        autoGrow();
+        sendBtn.disabled = true;
+        showTyping();
+
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            });
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split('\n\n');
+                buffer = lines.pop() || '';
+
+                for (const line of lines) {
+                    if (!line.trim()) continue;
+                    const eventMatch = line.match(/^event: (\w+)\ndata: (.+)$/s);
+                    if (!eventMatch) continue;
+                    const [, eventType, dataStr] = eventMatch;
+                    const data = JSON.parse(dataStr);
+
+                    if (eventType === 'waiting') {
+                        hideTyping();
+                        addMessage('system', data.message);
+                        showTyping();
+                    } else if (eventType === 'response') {
+                        hideTyping();
+                        addMessage('assistant', data.message);
+                    } else if (eventType === 'error') {
+                        hideTyping();
+                        addMessage('system', 'Error: ' + data.message, { error: true });
+                    }
+                }
+            }
+        } catch (error) {
+            hideTyping();
+            addMessage('system', 'Error: ' + error.message, { error: true });
+        } finally {
+            hideTyping();
+            sendBtn.disabled = false;
+            input.focus();
+        }
+    }
+
+    /* ---------- Reset ---------- */
+    async function resetAgent() {
+        if (!confirm('Start a new conversation? This will clear all chat history.')) return;
+        try {
+            await fetch('/api/reset', { method: 'POST' });
+            renderWelcome();
+        } catch (error) {
+            addMessage('system', 'Error resetting: ' + error.message, { error: true });
+        }
+    }
+
+    /* ---------- MCP servers ---------- */
+    async function loadMCPServers() {
+        const container = document.getElementById('mcp-servers');
+        try {
+            const response = await fetch('/api/mcp-servers');
+            const servers = await response.json();
+
+            if (!servers.length) {
+                container.innerHTML = '<div class="server-empty">No MCP servers configured</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            for (const server of servers) {
+                const item = document.createElement('div');
+                item.className = 'server-item';
+                const dot = document.createElement('span');
+                dot.className = `status-dot status-${server.status}`;
+                const text = document.createElement('span');
+                const displayText = server.config.length > 36
+                    ? server.config.substring(0, 33) + '…'
+                    : server.config;
+                text.textContent = `${displayText} · ${server.transport}`;
+                if (server.error) {
+                    text.title = `Error: ${server.error}`;
+                    text.style.cursor = 'help';
+                }
+                item.appendChild(dot);
+                item.appendChild(text);
+                container.appendChild(item);
+            }
+        } catch (error) {
+            container.innerHTML = '<div class="server-empty">Unable to load servers</div>';
+            console.error('Failed to fetch MCP servers:', error);
+        }
+    }
+
+    /* ---------- Sidebar quick actions ---------- */
+    document.querySelectorAll('.quick-action').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const prompt = btn.getAttribute('data-prompt');
+            if (!prompt) return;
+            input.value = prompt;
+            autoGrow();
+            input.focus();
+            sendMessage();
+        });
+    });
+
+    /* ---------- Auto-growing textarea ---------- */
+    function autoGrow() {
+        input.style.height = 'auto';
+        input.style.height = Math.min(input.scrollHeight, 140) + 'px';
+    }
+    input.addEventListener('input', autoGrow);
+
+    /* ---------- Wire up ---------- */
+    sendBtn.addEventListener('click', sendMessage);
+    resetBtn.addEventListener('click', resetAgent);
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    /* ---------- Init ---------- */
+    renderWelcome();
+    loadMCPServers();
+    input.focus();
+</script>
+
+</body>
+</html>
