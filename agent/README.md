@@ -17,15 +17,19 @@ From this directory, install the package in editable mode:
 
 ```bash
 # With uv (recommended)
-uv pip install -e .
+uv sync
+.venv\Scripts\activate  # Windows
+source .venv/bin/activate  # Linux or macOS
 
 # Or with pip
 pip install -e .
 ```
+> **Tip:** if you'd rather not activate the venv, prefix every command with
+> `uv run` (e.g. `uv run agent-cli http://localhost:8000/mcp`).
 
 ### Set Up API Keys
 
-The agent uses LiteLLM, which supports many LLM providers. Create a `.env` file in the project root with the appropriate API key:
+The agent uses LiteLLM, which supports many LLM providers. Create a `.env` file in this directory (`agent/`) with the appropriate API key. LiteLLM automatically loads it on startup, so no extra setup is needed:
 
 ```bash
 # .env file
@@ -44,15 +48,24 @@ GOOGLE_API_KEY=your-key-here
 
 #### Start an MCP Server First
 
+```bash
+# In a separate terminal, from the mcp_airline/ folder:
+# bash / zsh (Linux, macOS, Git Bash)
+PORT=8000 uv run start-airline-server
+
+# PowerShell (Windows)
+$env:PORT = "8000"; uv run start-airline-server
+# MCP endpoint will be at http://localhost:8000/mcp
+```
 
 #### Run the Agent CLI
 
 ```bash
 # Interactive CLI with MCP server
-agent-cli http://localhost:3000/mcp
+agent-cli http://localhost:8000/mcp
 
 # Or run directly with python
-python -m agent.cli http://localhost:3000/mcp
+python -m agent.cli http://localhost:8000/mcp
 
 # Without MCP servers (limited functionality)
 agent-cli
@@ -62,10 +75,10 @@ agent-cli
 
 ```bash
 # Start the web interface
-agent-webui http://localhost:3000/mcp
+agent-webui http://localhost:8000/mcp
 
 # Or with custom port
-agent-webui --port 8000 http://localhost:3000/mcp
+agent-webui --port 3000 http://localhost:8000/mcp
 
 # Then visit http://localhost:8000 in your browser
 ```
@@ -74,10 +87,17 @@ agent-webui --port 8000 http://localhost:3000/mcp
 
 ```bash
 # Run all benchmark tasks
-agent-benchmark http://localhost:3000/mcp
+agent-benchmark http://localhost:8000/mcp
+
+# Or run directly with python
+python -m agent.benchmark http://localhost:8000/mcp
 
 # Filter by task ID (e.g., run task 15)
+# bash / zsh (Linux, macOS, Git Bash)
 TASK_FILTER="15" agent-benchmark http://localhost:3000/mcp
+
+# PowerShell (Windows)
+$env:TASK_FILTER="15"; agent-benchmark http://localhost:8000/mcp
 ```
 
 ## Architecture
@@ -121,7 +141,7 @@ Edit `src/agent/config.py`:
 ```python
 # In agent_llm function, change the model parameter:
 return completion(
-    model="gemini/gemini-2.0-flash",  # Change this
+    model="gpt-4o-mini",  # Change this
     messages=messages,
     tools=tools if has_tools else None,
     tool_choice="auto" if has_tools else None,
@@ -137,9 +157,7 @@ Edit `src/agent/config.py`:
 
 ```python
 # Change the rate limiter configuration
-rate_limiter = RateLimiter(max_calls=15, period=60)  # 15 per minute
+rate_limiter = RateLimiter(max_calls=60, period=60)  # 60 per minute
 ```
 
-## License
 
-This is educational code for teaching purposes.

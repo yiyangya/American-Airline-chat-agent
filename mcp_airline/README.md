@@ -21,13 +21,16 @@ server.
 3. Start the HTTP transport (recommended) so you get both the MCP endpoint and the web UI:
 
    ```bash
-   PORT=8000 start-airline-server
+   # bash / zsh (Linux, macOS, Git Bash)
+   PORT=8000 uv run start-airline-server
+   
+   # PowerShell (Windows)
+   $env:PORT = "8000"; uv run start-airline-server
    ```
-
+   
    This binds to `http://127.0.0.1:8000` by default. 
 
-   For stdio omit `PORT`.
-
+   For stdio transport, omit `PORT` (bash) or skip the `$env:PORT` assignment (PowerShell).
 
 ## Trying it out with the MCP Inspector
 
