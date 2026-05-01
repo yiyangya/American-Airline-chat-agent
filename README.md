@@ -288,6 +288,32 @@ For deeper details on each component, see the per-package READMEs:
 
 ---
 
+## Screenshots
+
+A quick visual tour of the running system. Each screenshot is captured against the airline domain with the MCP server in HTTP mode and the agent web UI connected to it.
+
+### Login
+
+
+![Login screen](screenshots/screenshot_login.png)
+
+### Main Dashboard
+
+
+![Main page](screenshots/screenshot_main_page.png)
+
+### User Detail View
+
+
+![User detail page](screenshots/screenshot_user_page.png)
+
+### Agent Chatbot
+
+
+![Agent chatbot](screenshots/screenshot_chatbot.png)
+
+---
+
 ## License
 
 This project is released under the [MIT License](LICENSE). The τ²-bench data in `data/` is mirrored from [sierra-research/tau2-bench](https://github.com/sierra-research/tau2-bench) and remains subject to its upstream license.
