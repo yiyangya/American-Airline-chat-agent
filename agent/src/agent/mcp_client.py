@@ -1,6 +1,4 @@
 """
-BOILERPLATE CODE - NOT IMPORTANT FOR ASSIGNMENT
-
 This file is a thin wrapper around the MCP SDK that handles:
 - Connecting to MCP servers (via stdio or HTTP)
 - Listing available tools from servers
@@ -8,7 +6,6 @@ This file is a thin wrapper around the MCP SDK that handles:
 - Managing connection lifecycle
 
 This is standard integration code for working with MCP servers.
-The interesting agent logic is in agent.py and tool_manager.py.
 """
 
 import asyncio

@@ -437,8 +437,19 @@ def register_tools(mcp: FastMCP, db: AirlineDatabase) -> None:
 
         reservation = db.get_reservation(reservation_id)
         user = db.get_user(reservation["user_id"])
-
-        total_price = 50 * max(0, nonfree_baggages - reservation["nonfree_baggages"])
+        
+        # Server-side policy: existing baggage cannot be removed from a reservation.
+        # Enforced here (not just in the agent prompt) so the rule holds even if the
+        # agent is jailbroken, swapped for a weaker model, or bypassed entirely.
+        if total_baggages < reservation["total_baggages"]:
+            raise ValueError(
+                "Policy violation: total baggage on a reservation cannot be decreased."
+            )
+        if nonfree_baggages < reservation["nonfree_baggages"]:
+            raise ValueError(
+                "Policy violation: paid baggage cannot be removed for refund."
+            )
+        total_price = 50 * (nonfree_baggages - reservation["nonfree_baggages"])
 
         payment = _payment_for_update(user, payment_id, total_price)
         if payment is not None:

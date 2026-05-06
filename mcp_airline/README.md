@@ -9,7 +9,7 @@ server.
 2. From this directory, install the package in editable mode (pick your favourite manager):
 
    ```bash
-   uv pip install -e .
+   uv sync
    ```
 
    or
